@@ -15,11 +15,9 @@ import Empresa from '../pages/empresa'
 
 const useStyles = makeStyles((theme) => ({
   content: {
-    marginTop: '48px',
-    marginLeft: '10px',
+    margin: '48px 10px 10px 10px',
     [theme.breakpoints.up('sm')]: {
-      marginLeft: '260px',
-      marginTop: '64px',
+      margin: '64px 10px 10px 260px'
     }
   }
 }))

@@ -33,12 +33,6 @@ const useStyles = makeStyles((theme) => ({
     to: {
       visibility: 'hidden'
     }
-  },
-
-  '@-webkit-keyframes blink-animation': {
-    to: {
-      visibility: 'hidden'
-    }
   }
 }))
 
