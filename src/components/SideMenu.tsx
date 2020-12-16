@@ -100,7 +100,7 @@ const SideMenu = (props: any) => {
       <ListItem
         button
         component={NavLink}
-        exact
+        //exact
         to="/empresas"
         className={classes.link}
         activeClassName={classes.active}

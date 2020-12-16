@@ -1,14 +1,17 @@
+import { createContext } from 'react';
 import { Switch, Route } from 'react-router-dom'
 
 import EmpresaList from './EmpresaList'
-import EmpresaForm from './EmpresaForm'
+import EmpresaEdit from './EmpresaEdit'
+
+export const EmpresaContext = createContext<any | null>(null)
 
 const Empresa = () => {
 
   return (
     <Switch>
       <Route path="/empresas/create">
-        <EmpresaForm />
+        <EmpresaEdit />
       </Route>
       <Route path="/">
         <EmpresaList />
