@@ -1,6 +1,5 @@
-import { useContext } from 'react'
+import React, { useContext } from 'react'
 import {
-  //Grid,
   makeStyles,
   TextField
 } from '@material-ui/core'
@@ -52,24 +51,24 @@ const EmpresaForm = () => {
         className={clsx(classes.textField, classes.flexGrow1)}
         label="Razão Social"
         name="razaoSocial"
-        defaultValue={empresa?.razaoSocial || ''}
-        onBlur={handleChange}
+        value={empresa?.razaoSocial || ''}
+        onChange={handleChange}
       />
 
       <TextField
         className={clsx(classes.textField, classes.flexGrow1)}
         label="Nome Fantasia"
         name="nomeFantasia"
-        defaultValue={empresa?.nomeFantasia || ''}
-        onBlur={handleChange}
+        value={empresa?.nomeFantasia || ''}
+        onChange={handleChange}
       />
 
       <TextField
         className={classes.textField}
         label="CNPJ"
         name="cnpj"
-        defaultValue={empresa?.cnpj || ''}
-        onBlur={handleChange}
+        value={empresa?.cnpj || ''}
+        onChange={handleChange}
       />
 
       <TextField
@@ -77,8 +76,8 @@ const EmpresaForm = () => {
         type="email"
         label="E-mail"
         name="email"
-        defaultValue={empresa?.email || ''}
-        onBlur={handleChange}
+        value={empresa?.email || ''}
+        onChange={handleChange}
       />
     </div>
   )

@@ -16,7 +16,6 @@ const useService = (config: AxiosRequestConfig) => {
           data: result.data,
           error: null
         })
-        console.log(result.data)
       })
       .catch((err) => {
         setResponse({

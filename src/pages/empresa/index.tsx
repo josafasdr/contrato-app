@@ -10,6 +10,9 @@ const Empresa = () => {
 
   return (
     <Switch>
+      <Route path="/empresas/:id/edit">
+        <EmpresaEdit />
+      </Route>
       <Route path="/empresas/create">
         <EmpresaEdit />
       </Route>

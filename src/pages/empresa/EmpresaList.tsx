@@ -13,15 +13,16 @@ import {
   TablePagination,
   TableRow
 } from '@material-ui/core'
+import EditIcon from '@material-ui/icons/Edit'
 import useService from '../../hooks/useService'
 
 const columns = [
-  // { id: 'id', label: 'Id', minWidth: 50 },
-  { id: '_id', label: 'Id' },
-  { id: 'nomeFantasia', label: 'Nome' },
+  // { id: '_id', label: 'Id', minWidth: 50 },
   { id: 'rasaoSocial', label: 'Razão Social' },
+  { id: 'nomeFantasia', label: 'Nome' },
   { id: 'cnpj', label: 'CNPJ' },
-  { id: 'email', label: 'E-mail' }
+  { id: 'email', label: 'E-mail' },
+  { id: 'edit', label: 'Editar' }
 ];
 
 const useStyles = makeStyles({
@@ -36,6 +37,10 @@ const useStyles = makeStyles({
 
   container: {
     maxHeight: '73vh'
+  },
+
+  editLink: {
+    color: 'inherit'
   }
 })
 
@@ -98,16 +103,16 @@ const EmpresaList = () => {
                   return (
                     <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
                       {/* <TableCell>{new Date(parseInt(row.createdAt)).toLocaleDateString('pt-br')}</TableCell> */}
-                      <TableCell>{row._id}</TableCell>
+                      {/* <TableCell>{row._id}</TableCell> */}
                       <TableCell>{row.nomeFantasia}</TableCell>
                       <TableCell>{row.razaoSocial}</TableCell>
                       <TableCell>{row.cnpj}</TableCell>
                       <TableCell>{row.email}</TableCell>
-                      {/* <TableCell>
-                        <Link to={`/empresas/${row._id}`}>
-                          <FileCopyIcon />
+                      <TableCell>
+                        <Link className={classes.editLink} to={`/empresas/${row._id}/edit`}>
+                          <EditIcon />
                         </Link>
-                      </TableCell> */}
+                      </TableCell>
                     </TableRow>
                   );
                 })}

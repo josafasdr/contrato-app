@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import {
   makeStyles,
   Paper,
@@ -10,8 +10,7 @@ import axios from 'axios'
 
 import EmpresaForm from './EmpresaForm'
 import TelefoneForm from '../telefone/TelefoneForm'
-import { EmpresaContext } from '.'
-
+import { EmpresaContext } from './index'
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -40,15 +39,28 @@ const EmpresaEdit = () => {
   const classes = useStyles()
   const [empresa, setEmpresa] = useState<any>(null)
   const history = useHistory()
+  let { id } = useParams<{id?: string}>()
 
-  const handleSubmit = () => {
+  const handlePost = () => {
     axios({
       method: 'post',
       url: 'http://localhost:4000/empresas',
       headers: { 'Content-Type': 'application/json' },
       data: empresa
     }).then((response) => {
-      console.log(response)
+      handleBack()
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const handlePut = () => {
+    axios({
+      method: 'put',
+      url: `http://localhost:4000/empresas/${id}`,
+      headers: { 'Content-Type': 'application/json' },
+      data: empresa
+    }).then((response) => {
       handleBack()
     }).catch((err) => {
       console.log(err)
@@ -58,6 +70,21 @@ const EmpresaEdit = () => {
   const handleBack = () => {
     history.push('/empresas')
   }
+
+  useEffect(() => {
+    if (id) {
+      axios({
+        method: 'GET',
+        url: `http://localhost:4000/empresas/${id}`
+      })
+      .then((response) => {
+        setEmpresa(response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    }
+  }, [id, setEmpresa])
 
   return (
     <div>
@@ -86,7 +113,7 @@ const EmpresaEdit = () => {
           variant="contained"
           color="primary"
           size="small"
-          onClick={handleSubmit}
+          onClick={!!id ? handlePut : handlePost}
         >Salvar</Button>
       </div>
     </div>
