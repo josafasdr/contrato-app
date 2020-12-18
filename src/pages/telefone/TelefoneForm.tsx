@@ -1,8 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   makeStyles,
   TextField
 } from '@material-ui/core'
+
+import Telefone from '../../model/Telefone'
+//import { TelefoneContext } from './TelefoneList'
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -30,9 +33,12 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const TelefoneForm = () => {
+const TelefoneForm = (props: any) => {
   const classes = useStyles()
-  const [telefone, setTelefone] = useState({ ddd: '', telefone: '' })
+  const [telefone, setTelefone] = useState<Telefone>({ ddd: '', telefone: '' })
+  const [change, setChange] = useState(false)
+  //const { telefones, setTelefones } = useContext(TelefoneContext)
+  
 
   const handleChange = (event: any) => {
     const { name, value } = event.target
@@ -40,7 +46,15 @@ const TelefoneForm = () => {
       ...telefone,
       [name]: value
     })
+    setChange(true)
   }
+
+  useEffect(() => {
+    if (props.onChange && change) {
+      props.onChange(telefone)
+    }
+    setChange(false)
+  }, [props, telefone, change])
 
   return (
     <div className={classes.form}>

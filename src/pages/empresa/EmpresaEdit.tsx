@@ -8,9 +8,10 @@ import {
 } from '@material-ui/core'
 import axios from 'axios'
 
-import EmpresaForm from './EmpresaForm'
-import TelefoneForm from '../telefone/TelefoneForm'
 import { EmpresaContext } from './index'
+import EmpresaForm from './EmpresaForm'
+import TelefoneList from '../telefone/TelefoneList'
+import EnderecoForm from '../endereco/EnderecoForm'
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -96,8 +97,13 @@ const EmpresaEdit = () => {
           </Box>
 
           <Box className={classes.box} component="fieldset">
-            <legend>Telefones</legend>
-            <TelefoneForm />
+            <legend className={classes.legend}>Endereço</legend>
+            <EnderecoForm />
+          </Box>
+
+          <Box className={classes.box} component="fieldset">
+            <legend className={classes.legend}>Telefones</legend>
+            <TelefoneList />
           </Box>
         </EmpresaContext.Provider>
       </Paper>

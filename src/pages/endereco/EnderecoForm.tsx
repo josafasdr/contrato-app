@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core'
 import clsx from 'clsx'
 
-import { EmpresaContext } from '.'
+import { EmpresaContext } from '../empresa'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const EmpresaForm = () => {
+const EnderecoForm = () => {
   const classes = useStyles()
   const { empresa, setEmpresa } = useContext(EmpresaContext)
 
@@ -37,7 +37,7 @@ const EmpresaForm = () => {
     const { name, value } = event.target
     setEmpresa({
       ...empresa,
-      [name]: value
+      endereco: { ...empresa.endereco, [name]: value }
     })
   }
 
@@ -45,38 +45,45 @@ const EmpresaForm = () => {
     <div className={classes.root}>
       <TextField
         className={clsx(classes.textField, classes.flexGrow1)}
-        label="Razão Social"
-        name="razaoSocial"
-        value={empresa?.razaoSocial || ''}
+        label="Rua"
+        name="rua"
+        value={empresa?.endereco?.rua || ''}
         onChange={handleChange}
       />
 
       <TextField
         className={clsx(classes.textField, classes.flexGrow1)}
-        label="Nome Fantasia"
-        name="nomeFantasia"
-        value={empresa?.nomeFantasia || ''}
+        label="Número"
+        name="numero"
+        value={empresa?.endereco?.numero || ''}
         onChange={handleChange}
       />
 
       <TextField
         className={classes.textField}
-        label="CNPJ"
-        name="cnpj"
-        value={empresa?.cnpj || ''}
+        label="Bairro"
+        name="bairro"
+        value={empresa?.endereco?.bairro || ''}
         onChange={handleChange}
       />
 
       <TextField
         className={classes.textField}
-        type="email"
-        label="E-mail"
-        name="email"
-        value={empresa?.email || ''}
+        label="Cidade"
+        name="cidade"
+        value={empresa?.endereco?.cidade || ''}
+        onChange={handleChange}
+      />
+
+      <TextField
+        className={classes.textField}
+        label="Estado"
+        name="uf"
+        value={empresa?.endereco?.uf || ''}
         onChange={handleChange}
       />
     </div>
   )
 }
 
-export default EmpresaForm
+export default EnderecoForm
