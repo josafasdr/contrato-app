@@ -101,7 +101,7 @@ const EmpresaList = () => {
               <TableBody>
                 {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any) => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
+                    <TableRow hover tabIndex={-1} key={row._id}>
                       {/* <TableCell>{new Date(parseInt(row.createdAt)).toLocaleDateString('pt-br')}</TableCell> */}
                       {/* <TableCell>{row._id}</TableCell> */}
                       <TableCell>{row.nomeFantasia}</TableCell>
