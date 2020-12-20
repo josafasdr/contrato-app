@@ -10,6 +10,7 @@ import axios from 'axios'
 
 import ContratoForm from './ContratoForm'
 import { ContratoContext } from './index'
+import AditivoList from '../aditivo/AditivoList'
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -107,6 +108,10 @@ const ContratoEdit = () => {
           <Box className={classes.box} component="fieldset">
             <legend className={classes.legend}>Contrato</legend>
             <ContratoForm />
+          </Box>
+          <Box className={classes.box} component="fieldset">
+            <legend className={classes.legend}>Aditivos</legend>
+            <AditivoList />
           </Box>
         </ContratoContext.Provider>
       </Paper>
