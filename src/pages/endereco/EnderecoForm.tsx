@@ -29,15 +29,20 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const EnderecoForm = () => {
+const EnderecoForm = (props: any) => {
   const classes = useStyles()
+  const { readOnly } = props
   const { empresa, setEmpresa } = useContext(EmpresaContext)
 
   const handleChange = (event: any) => {
     const { name, value } = event.target
+    const { endereco } = empresa.data
     setEmpresa({
       ...empresa,
-      endereco: { ...empresa.endereco, [name]: value }
+      data: {
+        ...empresa.data,
+        endereco: { ...endereco, [name]: value }
+      }
     })
   }
 
@@ -47,40 +52,45 @@ const EnderecoForm = () => {
         className={clsx(classes.textField, classes.flexGrow1)}
         label="Rua"
         name="rua"
-        value={empresa?.endereco?.rua || ''}
+        value={empresa?.data?.endereco?.rua || ''}
         onChange={handleChange}
+        inputProps={{ readOnly: readOnly }}
       />
 
       <TextField
         className={clsx(classes.textField, classes.flexGrow1)}
         label="Número"
         name="numero"
-        value={empresa?.endereco?.numero || ''}
+        value={empresa?.data?.endereco?.numero || ''}
         onChange={handleChange}
+        inputProps={{ readOnly: readOnly }}
       />
 
       <TextField
         className={classes.textField}
         label="Bairro"
         name="bairro"
-        value={empresa?.endereco?.bairro || ''}
+        value={empresa?.data?.endereco?.bairro || ''}
         onChange={handleChange}
+        inputProps={{ readOnly: readOnly }}
       />
 
       <TextField
         className={classes.textField}
         label="Cidade"
         name="cidade"
-        value={empresa?.endereco?.cidade || ''}
+        value={empresa?.data?.endereco?.cidade || ''}
         onChange={handleChange}
+        inputProps={{ readOnly: readOnly }}
       />
 
       <TextField
         className={classes.textField}
         label="Estado"
         name="uf"
-        value={empresa?.endereco?.uf || ''}
+        value={empresa?.data?.endereco?.uf || ''}
         onChange={handleChange}
+        inputProps={{ readOnly: readOnly }}
       />
     </div>
   )

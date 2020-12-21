@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Link } from 'react-router-dom';
 import {
   makeStyles,
@@ -13,16 +13,20 @@ import {
   TablePagination,
   TableRow
 } from '@material-ui/core'
+import VisibilityIcon from '@material-ui/icons/Visibility'
 import EditIcon from '@material-ui/icons/Edit'
+import DeleteIcon from '@material-ui/icons/Delete'
+
+import { EmpresaContext } from '.'
 import useService from '../../hooks/useService'
+import EmpresaDeleteDialog from './EmpresaDeleteDialog'
 
 const columns = [
-  // { id: '_id', label: 'Id', minWidth: 50 },
   { id: 'rasaoSocial', label: 'Razão Social' },
   { id: 'nomeFantasia', label: 'Nome' },
   { id: 'cnpj', label: 'CNPJ' },
   { id: 'email', label: 'E-mail' },
-  { id: 'edit', label: 'Editar' }
+  { id: 'actions', label: 'Ações' }
 ];
 
 const useStyles = makeStyles({
@@ -40,12 +44,14 @@ const useStyles = makeStyles({
   },
 
   editLink: {
-    color: 'inherit'
+    color: 'gray',
+    marginRight: '10px'
   }
 })
 
 const EmpresaList = () => {
   const classes = useStyles()
+  const { setEmpresa } = useContext(EmpresaContext)
   const { loading, data, error } = useService({
     url: 'http://localhost:4000/empresas',
     //url: 'https://contrato-api.herokuapp.com/empresas',
@@ -64,8 +70,17 @@ const EmpresaList = () => {
     setPage(0)
   }
 
+  const openDeleteDialog = (id: string) => {
+    setEmpresa({
+      data: { ...data, _id: id },
+      openDialog: true
+    })
+  }
+
   return (
     <div className={classes.root}>
+      <EmpresaDeleteDialog />
+
       <Link to={`/empresas/create`}>
         <Button
           className={classes.button}
@@ -109,8 +124,16 @@ const EmpresaList = () => {
                       <TableCell>{row.cnpj}</TableCell>
                       <TableCell>{row.email}</TableCell>
                       <TableCell>
+                        <Link className={classes.editLink} to={`/empresas/${row._id}/detail`}>
+                          <VisibilityIcon titleAccess="Detalhes" aria-label="Detalhes" />
+                        </Link>
                         <Link className={classes.editLink} to={`/empresas/${row._id}/edit`}>
-                          <EditIcon />
+                          <EditIcon titleAccess="Editar" aria-label="Editar" />
+                        </Link>
+                        <Link className={classes.editLink} to='#'
+                          onClick={() => openDeleteDialog(row._id)}
+                        >
+                          <DeleteIcon titleAccess="Excluir" aria-label="Excluir" />
                         </Link>
                       </TableCell>
                     </TableRow>
