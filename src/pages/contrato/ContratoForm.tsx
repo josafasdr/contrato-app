@@ -155,6 +155,7 @@ const ContratoForm = () => {
             ))}
         </Select>
       </FormControl>
+  
       <FormControl className={classes.formControl}>
         <InputLabel id="status-contrato-label">Status de Contrato</InputLabel>
         <Select 

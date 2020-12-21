@@ -13,14 +13,14 @@ import {
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 
-import AditivoDialog from './AditivoDialog'
-import { ContratoContext } from '../contrato';
+import PagamentoDialog from './PagamentoDialog'
+import { ContaContext } from '../conta/ContaList';
 
 const columns = [
-  { id: 'valorContratoAditivo', label: 'Valor do aditivo' },
-  { id: 'dataRenovacao', label: 'Data de renovação' },
-  { id: 'dataVencimento', label: 'Data de vencimento' },
-  { id: 'delete', label: '' }
+  { id: 'dataPagamentoConta', label: 'Data do Pagamento' },
+  { id: 'valorPago', label: 'Valor Pago' },
+  { id: 'taxaJuros', label: 'Taxa de Juros' },
+  { id: 'delete', label: 'Excluir' }
 ];
 
 const useStyles = makeStyles({
@@ -43,12 +43,12 @@ const useStyles = makeStyles({
   }
 })
 
-export const AditivoContext = createContext<any | null>({})
+export const PagamentoContext = createContext<any | null>({})
 
-const AditivoList = () => {
+const PagamentoList = () => {
   const classes = useStyles()
   const [dialogOpen, setDialogOpen] = useState(false)
-  const { contrato, setContrato } = useContext(ContratoContext)
+  const { conta, setConta } = useContext(ContaContext)
 
   const handleOpenDialog = () => {
     setDialogOpen(true)
@@ -58,16 +58,16 @@ const AditivoList = () => {
     event.preventDefault()
     event.persist()
 
-    const obj = event.target.aditivo
+    const obj = event.target.pagamento
     Object.keys(obj).forEach(key => {
-      if (obj[key].name && obj[key].name === 'aditivo') {
-        const aditivo = obj[key].value
+      if (obj[key].name && obj[key].name === 'pagamento') {
+        const pagamento = obj[key].value
 
-        if (aditivo && aditivo !== undefined) {
-          const aditivos = contrato.aditivos.filter((item: any) => item !== aditivo)
-          setContrato({
-            ...contrato,
-            aditivos: aditivos
+        if (pagamento && pagamento !== undefined) {
+          const pagamentos = conta.pagamentos.filter((item: any) => item !== pagamento)
+          setConta({
+            ...conta,
+            pagamentos: pagamentos
           })
         }
       }
@@ -83,11 +83,11 @@ const AditivoList = () => {
         color="primary"
         onClick={handleOpenDialog}
       >
-        Inserir Aditivo
+        Inserir Pagamento
       </Button>
 
-      <AditivoContext.Provider value={{dialogOpen, setDialogOpen}}>
-        <AditivoDialog />
+      <PagamentoContext.Provider value={{dialogOpen, setDialogOpen}}>
+        <PagamentoDialog />
 
         <Paper className={classes.root}>
           <TableContainer className={classes.container}>
@@ -106,16 +106,16 @@ const AditivoList = () => {
                   ))}
                 </TableRow>
               </TableHead>
-              {contrato?.aditivos && <TableBody>
-                {contrato?.aditivos.map((row: any) => {
+              {conta?.pagamentos && <TableBody>
+                {conta?.pagamentos.map((row: any) => {
                   return (
-                    <TableRow hover tabIndex={-1} key={`${row.dataRenovacao}-${row.valorContratoAditivo}`}>
-                      <TableCell>{row.valorContratoAditivo}</TableCell>
-                      <TableCell>{(row.dataRenovacao ? row.dataRenovacao.substring(0, 10) : '')}</TableCell>
-                      <TableCell>{(row.dataVencimento ? row.dataVencimento.substring(0, 10) : '')}</TableCell>
+                    <TableRow hover tabIndex={-1} key={`${row.dataPagamentoConta}-${row.valorPago}`}>
+                      <TableCell>{(row.dataPagamentoConta ? row.dataPagamentoConta.substring(0, 10) : '')}</TableCell>
+                      <TableCell>{row.valorPago}</TableCell>
+                      <TableCell>{row.taxaJuros}</TableCell>
                       <TableCell>
                         <form onSubmit={handleExclude}>
-                          <input type="hidden" name="aditivo" value={row} />
+                          <input type="hidden" name="pagamento" value={row} />
                           <Button type="submit" className={classes.editLink}>
                             <DeleteIcon />
                           </Button>
@@ -128,9 +128,9 @@ const AditivoList = () => {
             </Table>
           </TableContainer>
         </Paper>
-      </AditivoContext.Provider>
+      </PagamentoContext.Provider>
     </div>
   )
 }
 
-export default AditivoList
+export default PagamentoList

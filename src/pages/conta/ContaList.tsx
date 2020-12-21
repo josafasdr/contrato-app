@@ -12,14 +12,16 @@ import {
   TableRow
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
+import EditIcon from '@material-ui/icons/Edit'
 
-import AditivoDialog from './AditivoDialog'
+import ContaDialog from './ContaDialog'
 import { ContratoContext } from '../contrato';
 
 const columns = [
-  { id: 'valorContratoAditivo', label: 'Valor do aditivo' },
-  { id: 'dataRenovacao', label: 'Data de renovação' },
+  { id: 'valorConta', label: 'Valor do conta' },
+  { id: 'dataRecebimento', label: 'Data de recebimento' },
   { id: 'dataVencimento', label: 'Data de vencimento' },
+  { id: 'edit', label: '' },
   { id: 'delete', label: '' }
 ];
 
@@ -43,9 +45,9 @@ const useStyles = makeStyles({
   }
 })
 
-export const AditivoContext = createContext<any | null>({})
+export const ContaContext = createContext<any | null>({})
 
-const AditivoList = () => {
+const ContaList = () => {
   const classes = useStyles()
   const [dialogOpen, setDialogOpen] = useState(false)
   const { contrato, setContrato } = useContext(ContratoContext)
@@ -58,16 +60,16 @@ const AditivoList = () => {
     event.preventDefault()
     event.persist()
 
-    const obj = event.target.aditivo
+    const obj = event.target.conta
     Object.keys(obj).forEach(key => {
-      if (obj[key].name && obj[key].name === 'aditivo') {
-        const aditivo = obj[key].value
+      if (obj[key].name && obj[key].name === 'conta') {
+        const conta = obj[key].value
 
-        if (aditivo && aditivo !== undefined) {
-          const aditivos = contrato.aditivos.filter((item: any) => item !== aditivo)
+        if (conta && conta !== undefined) {
+          const contas = contrato.contas.filter((item: any) => item !== conta)
           setContrato({
             ...contrato,
-            aditivos: aditivos
+            contas: contas
           })
         }
       }
@@ -83,11 +85,11 @@ const AditivoList = () => {
         color="primary"
         onClick={handleOpenDialog}
       >
-        Inserir Aditivo
+        Inserir Conta
       </Button>
 
-      <AditivoContext.Provider value={{dialogOpen, setDialogOpen}}>
-        <AditivoDialog />
+      <ContaContext.Provider value={{dialogOpen, setDialogOpen}}>
+        <ContaDialog />
 
         <Paper className={classes.root}>
           <TableContainer className={classes.container}>
@@ -106,16 +108,25 @@ const AditivoList = () => {
                   ))}
                 </TableRow>
               </TableHead>
-              {contrato?.aditivos && <TableBody>
-                {contrato?.aditivos.map((row: any) => {
+              {contrato?.contas && <TableBody>
+                {contrato?.contas.map((row: any) => {
                   return (
-                    <TableRow hover tabIndex={-1} key={`${row.dataRenovacao}-${row.valorContratoAditivo}`}>
-                      <TableCell>{row.valorContratoAditivo}</TableCell>
-                      <TableCell>{(row.dataRenovacao ? row.dataRenovacao.substring(0, 10) : '')}</TableCell>
-                      <TableCell>{(row.dataVencimento ? row.dataVencimento.substring(0, 10) : '')}</TableCell>
+                    <TableRow hover tabIndex={-1} key={`${row.tipoConta}-${row.dataVencimentoConta}`}>
+                      <TableCell>{row.valorConta}</TableCell>
+                      <TableCell>{(row.dataRecebimentoSetor ? row.dataRecebimentoSetor.substring(0, 10) : '')}</TableCell>
+                      <TableCell>{(row.dataVencimentoConta ? row.dataVencimentoConta.substring(0, 10) : '')}</TableCell>
+                      <TableCell>
+                        <Button
+                          className={classes.button}
+                          size="small"
+                          onClick={handleOpenDialog}
+                        >
+                          <EditIcon />
+                        </Button>
+                      </TableCell>
                       <TableCell>
                         <form onSubmit={handleExclude}>
-                          <input type="hidden" name="aditivo" value={row} />
+                          <input type="hidden" name="conta" value={row} />
                           <Button type="submit" className={classes.editLink}>
                             <DeleteIcon />
                           </Button>
@@ -128,9 +139,9 @@ const AditivoList = () => {
             </Table>
           </TableContainer>
         </Paper>
-      </AditivoContext.Provider>
+      </ContaContext.Provider>
     </div>
   )
 }
 
-export default AditivoList
+export default ContaList
