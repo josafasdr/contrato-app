@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react'
 import {
   makeStyles,
   TextField
@@ -29,15 +29,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-const EmpresaForm = () => {
+const EmpresaForm = (props: any) => {
   const classes = useStyles()
+  const { readOnly } = props
   const { empresa, setEmpresa } = useContext(EmpresaContext)
 
   const handleChange = (event: any) => {
     const { name, value } = event.target
     setEmpresa({
       ...empresa,
-      [name]: value
+      data: { ...empresa.data, [name]: value }
     })
   }
 
@@ -47,24 +48,27 @@ const EmpresaForm = () => {
         className={clsx(classes.textField, classes.flexGrow1)}
         label="Razão Social"
         name="razaoSocial"
-        value={empresa?.razaoSocial || ''}
+        value={empresa?.data?.razaoSocial || ''}
         onChange={handleChange}
+        inputProps={{ readOnly: readOnly }}
       />
 
       <TextField
         className={clsx(classes.textField, classes.flexGrow1)}
         label="Nome Fantasia"
         name="nomeFantasia"
-        value={empresa?.nomeFantasia || ''}
+        value={empresa?.data?.nomeFantasia || ''}
         onChange={handleChange}
+        inputProps={{ readOnly: readOnly }}
       />
 
       <TextField
         className={classes.textField}
         label="CNPJ"
         name="cnpj"
-        value={empresa?.cnpj || ''}
+        value={empresa?.data?.cnpj || ''}
         onChange={handleChange}
+        inputProps={{ readOnly: readOnly }}
       />
 
       <TextField
@@ -72,8 +76,9 @@ const EmpresaForm = () => {
         type="email"
         label="E-mail"
         name="email"
-        value={empresa?.email || ''}
+        value={empresa?.data?.email || ''}
         onChange={handleChange}
+        inputProps={{ readOnly: readOnly }}
       />
     </div>
   )

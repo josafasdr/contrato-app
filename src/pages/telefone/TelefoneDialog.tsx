@@ -15,11 +15,29 @@ const TelefoneDialog = () => {
   const { dialogOpen, setDialogOpen } = useContext(TelefoneContext)
 
   const handleClose = () => {
+    setDialogOpen(false)
+  }
+
+  const handleInsert = () => {
     if (Object.keys(telefone).length > 0) {
-      setEmpresa({
-        ...empresa,
-        telefones: [...empresa.telefones, telefone]
-      })
+      if (empresa.data && empresa.data.telefones) {
+        setEmpresa({
+          ...empresa,
+          data: {
+            ...empresa.data,
+            telefones: [...empresa.data.telefones, telefone]
+          }
+        })
+      } else {
+        setEmpresa({
+          ...empresa,
+          data: {
+            ...empresa.data,
+            telefones: [telefone]
+          }
+        })
+      }
+      
     }
     setDialogOpen(false)
   }
@@ -39,7 +57,7 @@ const TelefoneDialog = () => {
           <Button onClick={handleClose} color="primary">
             Cancelar
           </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleInsert} color="primary">
             Inserir
           </Button>
         </DialogActions>
