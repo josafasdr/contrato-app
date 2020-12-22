@@ -13,6 +13,7 @@ import {
   TablePagination,
   TableRow
 } from '@material-ui/core'
+//import { DataGrid, ColDef, RowProps, RowsProp, RowModel } from '@material-ui/data-grid'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -20,6 +21,7 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import { EmpresaContext } from '.'
 import useService from '../../hooks/useService'
 import EmpresaDeleteDialog from './EmpresaDeleteDialog'
+//import { Empresa } from '../../model/Empresa';
 
 const columns = [
   { id: 'rasaoSocial', label: 'Razão Social' },
@@ -27,7 +29,15 @@ const columns = [
   { id: 'cnpj', label: 'CNPJ' },
   { id: 'email', label: 'E-mail' },
   { id: 'actions', label: 'Ações' }
-];
+]
+
+/* const columns: ColDef[] = [
+  { field: 'rasaoSocial', headerName: 'Razão Social'},
+  { field: 'nomeFantasia', headerName: 'Nome Fantasia'},
+  { field: 'cnpj', headerName: 'CNPJ'},
+  { field: 'email', headerName: 'E-mail'},
+  { field: 'actions', headerName: 'Ações'},
+] */
 
 const useStyles = makeStyles({
   root: {
@@ -97,6 +107,10 @@ const EmpresaList = () => {
         error ? 
           <p>Erro :(</p> :
         <Paper className={classes.root}>
+          {/* <DataGrid columns={columns} rows={data.map((row, index) => {
+            console.log({ ...row, id: index })
+            return { ...row, id: index }
+           })}/> */}
           <TableContainer className={classes.container}>
             <Table stickyHeader={true} aria-label="sticky table">
               <TableHead>

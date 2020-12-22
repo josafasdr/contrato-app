@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react'
 import axios, { AxiosRequestConfig } from 'axios'
+import { Empresa } from '../model/Empresa'
 
 const useService = (config: AxiosRequestConfig) => {
-  const [response, setResponse] = useState({
+  const [response, setResponse] = useState<{
+    loading: boolean,
+    data: Empresa[],
+    error: any
+  }>({
     loading: true,
     data: [],
     error: null
