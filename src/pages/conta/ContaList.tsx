@@ -16,6 +16,7 @@ import EditIcon from '@material-ui/icons/Edit'
 
 import ContaDialog from './ContaDialog'
 import { ContratoContext } from '../contrato';
+import * as contratoService from '../../services/contratoService';
 
 const columns = [
   { id: 'valorConta', label: 'Valor do conta' },
@@ -50,30 +51,21 @@ export const ContaContext = createContext<any | null>({})
 const ContaList = () => {
   const classes = useStyles()
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [recordForEdit, setRecordForEdit] = useState(null)
   const { contrato, setContrato } = useContext(ContratoContext)
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (item:any) => {
+    setRecordForEdit(item);
     setDialogOpen(true)
   }
 
-  const handleExclude = (event: any) => {
-    event.preventDefault()
-    event.persist()
+  const handleExclude = (item: any) => {
+    const index = contrato.contas.indexOf(item);
+    if (index > -1) {
+      contrato.contas.splice(index, 1);
+    }
 
-    const obj = event.target.conta
-    Object.keys(obj).forEach(key => {
-      if (obj[key].name && obj[key].name === 'conta') {
-        const conta = obj[key].value
-
-        if (conta && conta !== undefined) {
-          const contas = contrato.contas.filter((item: any) => item !== conta)
-          setContrato({
-            ...contrato,
-            contas: contas
-          })
-        }
-      }
-    })
+    contratoService.update(contrato, contrato._id);
   }
 
   return (
@@ -83,13 +75,13 @@ const ContaList = () => {
         variant="contained"
         size="small"
         color="primary"
-        onClick={handleOpenDialog}
+        onClick={() =>{handleOpenDialog({})}}
       >
         Inserir Conta
       </Button>
 
       <ContaContext.Provider value={{dialogOpen, setDialogOpen}}>
-        <ContaDialog />
+        <ContaDialog recordForEdit={recordForEdit} />
 
         <Paper className={classes.root}>
           <TableContainer className={classes.container}>
@@ -111,7 +103,7 @@ const ContaList = () => {
               {contrato?.contas && <TableBody>
                 {contrato?.contas.map((row: any) => {
                   return (
-                    <TableRow hover tabIndex={-1} key={`${row.tipoConta}-${row.dataVencimentoConta}`}>
+                    <TableRow hover tabIndex={-1} key={`${row._id}`}>
                       <TableCell>{row.valorConta}</TableCell>
                       <TableCell>{(row.dataRecebimentoSetor ? row.dataRecebimentoSetor.substring(0, 10) : '')}</TableCell>
                       <TableCell>{(row.dataVencimentoConta ? row.dataVencimentoConta.substring(0, 10) : '')}</TableCell>
@@ -119,13 +111,13 @@ const ContaList = () => {
                         <Button
                           className={classes.button}
                           size="small"
-                          onClick={handleOpenDialog}
+                          onClick={() => {handleOpenDialog(row)}}
                         >
                           <EditIcon />
                         </Button>
                       </TableCell>
                       <TableCell>
-                        <form onSubmit={handleExclude}>
+                        <form onSubmit={ () => {handleExclude(row)}}>
                           <input type="hidden" name="conta" value={row} />
                           <Button type="submit" className={classes.editLink}>
                             <DeleteIcon />

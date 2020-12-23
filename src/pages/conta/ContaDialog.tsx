@@ -10,6 +10,7 @@ import ContaForm from './ContaForm'
 import { ContaContext } from './ContaList'
 import { Box, makeStyles } from '@material-ui/core'
 import PagamentoList from '../pagamento/PagamentoList'
+import * as contratoService from '../../services/contratoService';
 
 const useStyles = makeStyles((theme) => ({
     box: {
@@ -34,19 +35,21 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
   
-const ContaDialog = () => {
+const ContaDialog = (props:any) => {
+
+  if(props.recordForEdit){
+    if(props.recordForEdit.dataVencimentoConta)
+      props.recordForEdit.dataVencimentoConta = props.recordForEdit.dataVencimentoConta.substring(0, 10);
+    if(props.recordForEdit.dataRecebimentoSetor)  
+      props.recordForEdit.dataRecebimentoSetor = props.recordForEdit.dataRecebimentoSetor.substring(0, 10);
+  }
+
   const classes = useStyles()
   const { contrato, setContrato } = useContext(ContratoContext)
-  const [conta, setConta] = useState({ ddd: '', conta: '' })
+  const [conta, setConta] = useState({ _id: 0 })
   const { dialogOpen, setDialogOpen } = useContext(ContaContext)
 
   const handleClose = () => {
-    if (Object.keys(conta).length > 0) {
-      setContrato({
-        ...contrato,
-        contas: [...contrato.contas, conta]
-      })
-    }
     setDialogOpen(false)
   }
 
@@ -54,12 +57,53 @@ const ContaDialog = () => {
     setConta(data)
   }
 
+  const handleInsert = () => {
+
+    if(contrato.contas)
+      contrato.contas.push(conta);
+    else{
+      contrato.contas = [conta];
+    }
+
+    contratoService.update(contrato, contrato._id)
+      .then((response) => {
+        setDialogOpen(false)
+      }).catch((err) => {
+        console.log(err)
+    })
+
+  }
+
+  const handleEdit = () => {
+    for(let contaContrato of contrato.contas){
+      if(contaContrato._id == conta._id){
+        const index = contrato.contas.indexOf(contaContrato);
+        if (index > -1) {
+          contrato.contas.splice(index, 1);
+        }
+        contrato.contas = [...contrato.contas, conta];
+      }
+    }
+    setContrato({
+      ...contrato,
+      contas: [...contrato.contas]
+    })
+    
+    contratoService.update(contrato, contrato._id)
+      .then((response) => {
+        setDialogOpen(false)
+      }).catch((err) => {
+        console.log(err)
+    })
+    
+  }
+
   return (
     <div>
       <Dialog open={dialogOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Inserir Conta</DialogTitle>
         <DialogContent>
-          <ContaForm onChange={handleChange} />
+          <ContaForm recordForEdit={props.recordForEdit} onChange={handleChange} />
           <Box className={classes.box} component="fieldset">
             <legend className={classes.legend}>Contas</legend>
             <PagamentoList />
@@ -69,8 +113,8 @@ const ContaDialog = () => {
           <Button onClick={handleClose} color="primary">
             Cancelar
           </Button>
-          <Button onClick={handleClose} color="primary">
-            Inserir
+          <Button onClick={(props.recordForEdit && props.recordForEdit._id ? handleEdit : handleInsert)} color="primary">
+            Salvar
           </Button>
         </DialogActions>
       </Dialog>
