@@ -5,7 +5,6 @@ import {
 } from '@material-ui/core'
 
 import Telefone from '../../model/Telefone'
-//import { TelefoneContext } from './TelefoneList'
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -37,8 +36,6 @@ const TelefoneForm = (props: any) => {
   const classes = useStyles()
   const [telefone, setTelefone] = useState<Telefone>({ ddd: '', telefone: '' })
   const [change, setChange] = useState(false)
-  //const { telefones, setTelefones } = useContext(TelefoneContext)
-  
 
   const handleChange = (event: any) => {
     const { name, value } = event.target

@@ -17,7 +17,6 @@ import TelefoneDialog from './TelefoneDialog'
 import { EmpresaContext } from '../empresa';
 
 const columns = [
-  // { id: '_id', label: 'Id', minWidth: 50 },
   { id: 'ddd', label: 'DDD' },
   { id: 'telefone', label: 'Telefone' }
 ];

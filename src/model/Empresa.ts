@@ -1,25 +1,25 @@
 export type Empresa = {
-  id?: Number,
-  cnpj: String,
-  razaoSocial: String,
-  nomeFantasia: String,
-  email: String,
+  _id?: Number,
+  cnpj: string,
+  razaoSocial: string,
+  nomeFantasia: string,
+  email: string,
   endereco?: Endereco,
   telefones?: Telefone[],
   //contratos: Contrato[],
 }
 
 type Endereco = {
-  _idEndereco: String,
-  rua: String,
+  _idEndereco: string,
+  rua: string,
   numero: Number,
-  bairro: String,
-  cidade: String,
-  uf: String
+  bairro: string,
+  cidade: string,
+  uf: string
 }
 
 type Telefone = {
-  _id_telefone: String,
-  ddd: String,
-  telefone: String
+  _id_telefone: string,
+  ddd: string,
+  telefone: string
 }
