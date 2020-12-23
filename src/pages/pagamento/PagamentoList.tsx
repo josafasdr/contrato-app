@@ -12,14 +12,17 @@ import {
   TableRow
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
+import EditIcon from '@material-ui/icons/Edit'
 
-import AditivoDialog from './AditivoDialog'
+import PagamentoDialog from './PagamentoDialog'
+import { ContaContext } from '../conta/ContaList';
 import { ContratoContext } from '../contrato';
+import * as contratoService from '../../services/contratoService';
 
 const columns = [
-  { id: 'valorContratoAditivo', label: 'Valor do aditivo' },
-  { id: 'dataRenovacao', label: 'Data de renovação' },
-  { id: 'dataVencimento', label: 'Data de vencimento' },
+  { id: 'dataPagamentoConta', label: 'Data do Pagamento' },
+  { id: 'valorPago', label: 'Valor Pago' },
+  { id: 'taxaJuros', label: 'Taxa de Juros' },
   { id: 'delete', label: '' }
 ];
 
@@ -43,35 +46,34 @@ const useStyles = makeStyles({
   }
 })
 
-export const AditivoContext = createContext<any | null>({})
+export const PagamentoContext = createContext<any | null>({})
 
-const AditivoList = () => {
+const PagamentoList = (props:any) => {
+
   const classes = useStyles()
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [recordForEdit, setRecordForEdit] = useState(null)
+  const [conta, setConta] = useState({...props.conta});
   const { contrato, setContrato } = useContext(ContratoContext)
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (item:any) => {
+    setRecordForEdit(item);
     setDialogOpen(true)
   }
 
-  const handleExclude = (event: any) => {
-    event.preventDefault()
-    event.persist()
+  const handleExclude = (item: any) => {
 
-    const obj = event.target.aditivo
-    Object.keys(obj).forEach(key => {
-      if (obj[key].name && obj[key].name === 'aditivo') {
-        const aditivo = obj[key].value
-
-        if (aditivo && aditivo !== undefined) {
-          const aditivos = contrato.aditivos.filter((item: any) => item !== aditivo)
-          setContrato({
-            ...contrato,
-            aditivos: aditivos
-          })
+    for(let contaContrato of contrato.contas){
+      if(contaContrato._id === conta._id){
+        const index = contaContrato.pagamentos.indexOf(item);
+        if (index > -1) {
+          contaContrato.pagamentos.splice(index, 1);
         }
+    
       }
-    })
+    }
+
+    contratoService.update(contrato, contrato._id);
   }
 
   return (
@@ -81,13 +83,13 @@ const AditivoList = () => {
         variant="contained"
         size="small"
         color="primary"
-        onClick={handleOpenDialog}
+        onClick={() =>{handleOpenDialog({})}}
       >
-        Inserir Aditivo
+        Inserir Pagamento
       </Button>
 
-      <AditivoContext.Provider value={{dialogOpen, setDialogOpen}}>
-        <AditivoDialog />
+      <PagamentoContext.Provider value={{dialogOpen, setDialogOpen}}>
+        <PagamentoDialog recordForEdit={props.conta} />
 
         <Paper className={classes.root}>
           <TableContainer className={classes.container}>
@@ -106,16 +108,16 @@ const AditivoList = () => {
                   ))}
                 </TableRow>
               </TableHead>
-              {contrato?.aditivos && <TableBody>
-                {contrato?.aditivos.map((row: any) => {
+              {conta?.pagamentos && <TableBody>
+                {conta?.pagamentos.map((row: any) => {
                   return (
-                    <TableRow hover tabIndex={-1} key={`${row.dataRenovacao}-${row.valorContratoAditivo}`}>
-                      <TableCell>{row.valorContratoAditivo}</TableCell>
-                      <TableCell>{(row.dataRenovacao ? row.dataRenovacao.substring(0, 10) : '')}</TableCell>
-                      <TableCell>{(row.dataVencimento ? row.dataVencimento.substring(0, 10) : '')}</TableCell>
+                    <TableRow hover tabIndex={-1} key={`${row.dataPagamentoConta}-${row.valorPago}`}>
+                      <TableCell>{(row.dataPagamentoConta ? row.dataPagamentoConta.substring(0, 10) : '')}</TableCell>
+                      <TableCell>{row.valorPago}</TableCell>
+                      <TableCell>{row.taxaJuros}</TableCell>
                       <TableCell>
-                        <form onSubmit={handleExclude}>
-                          <input type="hidden" name="aditivo" value={row} />
+                          <form onSubmit={ () => {handleExclude(row)}}>
+                          <input type="hidden" name="pagamento" value={row} />
                           <Button type="submit" className={classes.editLink}>
                             <DeleteIcon />
                           </Button>
@@ -128,9 +130,9 @@ const AditivoList = () => {
             </Table>
           </TableContainer>
         </Paper>
-      </AditivoContext.Provider>
+      </PagamentoContext.Provider>
     </div>
   )
 }
 
-export default AditivoList
+export default PagamentoList

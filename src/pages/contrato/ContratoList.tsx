@@ -4,13 +4,15 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useService from '../../hooks/useService';
-import axios from 'axios'
+import * as contratoService from '../../services/contratoService';
 
 const columns = [
   { id: 'numero', label: 'Número' },
   { id: 'tipoContrato', label: 'Tipo de Contrato' },
   { id: 'statusContrato', label: 'Status' },
-  { id: 'valorContrato', label: 'Valor' }
+  { id: 'valorContrato', label: 'Valor' },
+  { id: 'edit', label: '' },
+  { id: 'delete', label: '' }
 ];
 
 const useStyles = makeStyles({
@@ -66,15 +68,7 @@ const ContratoList = () => {
   ]
 
   function deleteContrato(id:any){
-    axios({
-      method: 'delete',
-      url: `${process.env.REACT_APP_PATH_API}/contratos/${id}`,
-      headers: { 'Content-Type': 'application/json' }
-    }).then((response) => {
-      window.location.reload();
-    }).catch((err) => {
-      console.log(err)
-    })
+    contratoService.remove(id);
   }
 
   return (
@@ -127,7 +121,6 @@ const ContratoList = () => {
                       <TableCell>
                         <Button
                           className={classes.button}
-                          variant="contained"
                           size="small"
                           onClick={() => {deleteContrato(row._id)}}
                         >

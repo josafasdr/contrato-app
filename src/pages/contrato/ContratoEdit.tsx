@@ -6,11 +6,12 @@ import {
   Box,
   Button
 } from '@material-ui/core'
-import axios from 'axios'
 
 import ContratoForm from './ContratoForm'
 import { ContratoContext } from './index'
 import AditivoList from '../aditivo/AditivoList'
+import ContaList from '../conta/ContaList'
+import * as contratoService from '../../services/contratoService';
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -53,25 +54,17 @@ const ContratoEdit = () => {
       return;
     }
     
-    axios({
-      method: 'post',
-      url: `${process.env.REACT_APP_PATH_API}/contratos`,
-      headers: { 'Content-Type': 'application/json' },
-      data: contrato
-    }).then((response) => {
-      handleBack()
-    }).catch((err) => {
-      console.log(err)
-    })
+    contratoService.insert(contrato)
+      .then((response) => {
+        handleBack()
+      }).catch((err) => {
+        console.log(err)
+      })
   }
 
   const handlePut = () => {
-    axios({
-      method: 'put',
-      url: `${process.env.REACT_APP_PATH_API}/contratos/${id}`,
-      headers: { 'Content-Type': 'application/json' },
-      data: contrato
-    }).then((response) => {
+    contratoService.update(contrato, id)
+    .then((response) => {
       handleBack()
     }).catch((err) => {
       console.log(err)
@@ -79,25 +72,22 @@ const ContratoEdit = () => {
   }
 
   const handleBack = () => {
-    history.push('/Contratos')
+    history.push('/contratos')
   }
 
   useEffect(() => {
     if (id) {
-      axios({
-        method: 'GET',
-        url: `${process.env.REACT_APP_PATH_API}/contratos/${id}`
-      })
-      .then((response) => {
-        if(response.data.dataCelebracaoContrato)
-          response.data.dataCelebracaoContrato = response.data.dataCelebracaoContrato.substring(0, 10);
-        if(response.data.dataFinalizacaoContrato)  
-          response.data.dataFinalizacaoContrato = response.data.dataFinalizacaoContrato.substring(0, 10);
-        setContrato(response.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+      contratoService.get(id)
+        .then((response) => {
+          if(response.data.dataCelebracaoContrato)
+            response.data.dataCelebracaoContrato = response.data.dataCelebracaoContrato.substring(0, 10);
+          if(response.data.dataFinalizacaoContrato)  
+            response.data.dataFinalizacaoContrato = response.data.dataFinalizacaoContrato.substring(0, 10);
+          setContrato(response.data)
+        })
+        .catch((error) => {
+          console.log(error)
+        })
     }
   }, [id, setContrato])
 
@@ -112,6 +102,10 @@ const ContratoEdit = () => {
           <Box className={classes.box} component="fieldset">
             <legend className={classes.legend}>Aditivos</legend>
             <AditivoList />
+          </Box>
+          <Box className={classes.box} component="fieldset">
+            <legend className={classes.legend}>Contas</legend>
+            <ContaList />
           </Box>
         </ContratoContext.Provider>
       </Paper>

@@ -12,14 +12,17 @@ import {
   TableRow
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
+import EditIcon from '@material-ui/icons/Edit'
 
-import AditivoDialog from './AditivoDialog'
+import ContaDialog from './ContaDialog'
 import { ContratoContext } from '../contrato';
+import * as contratoService from '../../services/contratoService';
 
 const columns = [
-  { id: 'valorContratoAditivo', label: 'Valor do aditivo' },
-  { id: 'dataRenovacao', label: 'Data de renovação' },
+  { id: 'valorConta', label: 'Valor do conta' },
+  { id: 'dataRecebimento', label: 'Data de recebimento' },
   { id: 'dataVencimento', label: 'Data de vencimento' },
+  { id: 'edit', label: '' },
   { id: 'delete', label: '' }
 ];
 
@@ -43,35 +46,26 @@ const useStyles = makeStyles({
   }
 })
 
-export const AditivoContext = createContext<any | null>({})
+export const ContaContext = createContext<any | null>({})
 
-const AditivoList = () => {
+const ContaList = () => {
   const classes = useStyles()
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [recordForEdit, setRecordForEdit] = useState(null)
   const { contrato, setContrato } = useContext(ContratoContext)
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (item:any) => {
+    setRecordForEdit(item);
     setDialogOpen(true)
   }
 
-  const handleExclude = (event: any) => {
-    event.preventDefault()
-    event.persist()
+  const handleExclude = (item: any) => {
+    const index = contrato.contas.indexOf(item);
+    if (index > -1) {
+      contrato.contas.splice(index, 1);
+    }
 
-    const obj = event.target.aditivo
-    Object.keys(obj).forEach(key => {
-      if (obj[key].name && obj[key].name === 'aditivo') {
-        const aditivo = obj[key].value
-
-        if (aditivo && aditivo !== undefined) {
-          const aditivos = contrato.aditivos.filter((item: any) => item !== aditivo)
-          setContrato({
-            ...contrato,
-            aditivos: aditivos
-          })
-        }
-      }
-    })
+    contratoService.update(contrato, contrato._id);
   }
 
   return (
@@ -81,13 +75,13 @@ const AditivoList = () => {
         variant="contained"
         size="small"
         color="primary"
-        onClick={handleOpenDialog}
+        onClick={() =>{handleOpenDialog({})}}
       >
-        Inserir Aditivo
+        Inserir Conta
       </Button>
 
-      <AditivoContext.Provider value={{dialogOpen, setDialogOpen}}>
-        <AditivoDialog />
+      <ContaContext.Provider value={{dialogOpen, setDialogOpen}}>
+        <ContaDialog recordForEdit={recordForEdit} />
 
         <Paper className={classes.root}>
           <TableContainer className={classes.container}>
@@ -106,16 +100,25 @@ const AditivoList = () => {
                   ))}
                 </TableRow>
               </TableHead>
-              {contrato?.aditivos && <TableBody>
-                {contrato?.aditivos.map((row: any) => {
+              {contrato?.contas && <TableBody>
+                {contrato?.contas.map((row: any) => {
                   return (
-                    <TableRow hover tabIndex={-1} key={`${row.dataRenovacao}-${row.valorContratoAditivo}`}>
-                      <TableCell>{row.valorContratoAditivo}</TableCell>
-                      <TableCell>{(row.dataRenovacao ? row.dataRenovacao.substring(0, 10) : '')}</TableCell>
-                      <TableCell>{(row.dataVencimento ? row.dataVencimento.substring(0, 10) : '')}</TableCell>
+                    <TableRow hover tabIndex={-1} key={`${row._id}`}>
+                      <TableCell>{row.valorConta}</TableCell>
+                      <TableCell>{(row.dataRecebimentoSetor ? row.dataRecebimentoSetor.substring(0, 10) : '')}</TableCell>
+                      <TableCell>{(row.dataVencimentoConta ? row.dataVencimentoConta.substring(0, 10) : '')}</TableCell>
                       <TableCell>
-                        <form onSubmit={handleExclude}>
-                          <input type="hidden" name="aditivo" value={row} />
+                        <Button
+                          className={classes.button}
+                          size="small"
+                          onClick={() => {handleOpenDialog(row)}}
+                        >
+                          <EditIcon />
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        <form onSubmit={ () => {handleExclude(row)}}>
+                          <input type="hidden" name="conta" value={row} />
                           <Button type="submit" className={classes.editLink}>
                             <DeleteIcon />
                           </Button>
@@ -128,9 +131,9 @@ const AditivoList = () => {
             </Table>
           </TableContainer>
         </Paper>
-      </AditivoContext.Provider>
+      </ContaContext.Provider>
     </div>
   )
 }
 
-export default AditivoList
+export default ContaList
