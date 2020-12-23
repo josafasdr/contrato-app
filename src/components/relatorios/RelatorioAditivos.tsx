@@ -34,6 +34,11 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   
+    margincombo: {
+      margin: theme.spacing(1),
+      marginBottom: '20px'
+    },
+  
     grid: {
       width: '100%'
     },
@@ -123,9 +128,10 @@ export const RelatorioAditivos = () => {
 
     return (
         <Paper>
-            <FormControl className={classes.formControl}>
-              <InputLabel id="empresa-label">Empresa</InputLabel>
+            <div className={classes.margincombo}>
+              <InputLabel id="empresa-label">Selecione a empresa</InputLabel>
               <Select 
+                fullWidth={true}
                 labelId="empresa-label"
                 id="empresa"
                 name="_idEmpresa"
@@ -138,8 +144,7 @@ export const RelatorioAditivos = () => {
                     </MenuItem>
                   ))}
               </Select>
-            </FormControl>
-
+            </div>
             <TableContainer className={classes.container}>
                 <Table stickyHeader={true} aria-label="sticky table">
                     <TableHead>
@@ -160,9 +165,12 @@ export const RelatorioAditivos = () => {
                         {aditivos.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any) => {
                         return (
                             <TableRow hover role="checkbox" tabIndex={-1} key={row._id}>
-                                <TableCell>{(row.dataRenovacao ? row.dataRenovacao.substring(0, 10) : '')}</TableCell>
-                                <TableCell>{(row.dataVencimento ? row.dataVencimento.substring(0, 10) : '')}</TableCell>
-                                <TableCell>{row.valorContratoAditivo}</TableCell>
+                                <TableCell>{new Date(row.dataRenovacao).toLocaleDateString('pt-br')}</TableCell>
+                                <TableCell>{new Date(row.dataVencimento).toLocaleDateString('pt-br')}</TableCell>
+                                <TableCell>{new Intl.NumberFormat("pt-BR", {
+                                    style: "currency",
+                                    "currency": "BRL"
+                                  }).format(row.valorContratoAditivo)}</TableCell>
                             </TableRow>
                         );
                         })}

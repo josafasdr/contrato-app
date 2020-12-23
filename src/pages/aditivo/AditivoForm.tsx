@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AditivoForm = (props: any) => {
   const classes = useStyles()
-  const [aditivo, setAditivo] = useState<Aditivo>({ })
+  const [aditivo, setAditivo] = useState<Aditivo>(props.recordForEdit || {})
   const [change, setChange] = useState(false)
   //const { aditivos, setAditivos } = useContext(AditivoContext)
   
@@ -75,25 +75,25 @@ const AditivoForm = (props: any) => {
       />
 
       <FormControl className={classes.margin}>
-        <InputLabel htmlFor="data-renovacao-label">Data de Renovação</InputLabel>
         <TextField
+          label="Data de Renovação"
           id="data-renovacao-label"
           className={classes.textField}
           type="date"
           name="dataRenovacao"
-          value={aditivo?.dataRenovacao || ''}
+          value={aditivo?.dataRenovacao || new Date()}
           onChange={handleChange}
         />
       </FormControl>
 
       <FormControl className={classes.margin}>
-        <InputLabel htmlFor="data-vencimento-label">Data de Vencimento</InputLabel>
         <TextField
+          label="Data de Vencimento"
           id="data-vencimento-label"
           className={classes.textField}
           type="date"
           name="dataVencimento"
-          value={aditivo?.dataVencimento || ''}
+          value={aditivo?.dataVencimento || new Date()}
           onChange={handleChange}
         />
       </FormControl>

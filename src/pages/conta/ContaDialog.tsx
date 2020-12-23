@@ -44,8 +44,6 @@ const ContaDialog = (props:any) => {
       props.recordForEdit.dataRecebimentoSetor = props.recordForEdit.dataRecebimentoSetor.substring(0, 10);
   }
 
-  console.log('contadialog props.recordForEdit - ', props.recordForEdit)
-
   const classes = useStyles()
   const { contrato, setContrato } = useContext(ContratoContext)
   const [conta, setConta] = useState({...props.recordForEdit})

@@ -128,7 +128,7 @@ export const RelatorioPagamento = () => {
   useEffect(() => {
     if (data.length > 0) {
       axios({
-        url: `${process.env.REACT_APP_PATH_API}/contratos/pagamentos?idEmpresa=${data[index]._id}`
+        url: `${process.env.REACT_APP_PATH_API}/pagamentos?idEmpresa=${data[index]._id}`
       })
       .then(response => setContratos(response.data))
       .catch(error => console.log(error))

@@ -12,14 +12,17 @@ import {
   TableRow
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
+import EditIcon from '@material-ui/icons/Edit'
 
 import AditivoDialog from './AditivoDialog'
 import { ContratoContext } from '../contrato';
+import * as contratoService from '../../services/contratoService';
 
 const columns = [
   { id: 'valorContratoAditivo', label: 'Valor do aditivo' },
   { id: 'dataRenovacao', label: 'Data de renovação' },
   { id: 'dataVencimento', label: 'Data de vencimento' },
+  { id: 'edit', label: '' },
   { id: 'delete', label: '' }
 ];
 
@@ -34,7 +37,7 @@ const useStyles = makeStyles({
   },
 
   container: {
-    width: '50%',
+    width: '100%',
     minWidth: '200px'
   },
 
@@ -48,30 +51,21 @@ export const AditivoContext = createContext<any | null>({})
 const AditivoList = () => {
   const classes = useStyles()
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [recordForEdit, setRecordForEdit] = useState(null)
   const { contrato, setContrato } = useContext(ContratoContext)
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (item:any) => {
+    setRecordForEdit(item);
     setDialogOpen(true)
   }
 
-  const handleExclude = (event: any) => {
-    event.preventDefault()
-    event.persist()
+  const handleExclude = (item: any) => {
+    const index = contrato.aditivos.indexOf(item);
+    if (index > -1) {
+      contrato.aditivos.splice(index, 1);
+    }
 
-    const obj = event.target.aditivo
-    Object.keys(obj).forEach(key => {
-      if (obj[key].name && obj[key].name === 'aditivo') {
-        const aditivo = obj[key].value
-
-        if (aditivo && aditivo !== undefined) {
-          const aditivos = contrato.aditivos.filter((item: any) => item !== aditivo)
-          setContrato({
-            ...contrato,
-            aditivos: aditivos
-          })
-        }
-      }
-    })
+    contratoService.update(contrato, contrato._id);
   }
 
   return (
@@ -87,7 +81,7 @@ const AditivoList = () => {
       </Button>
 
       <AditivoContext.Provider value={{dialogOpen, setDialogOpen}}>
-        <AditivoDialog />
+        <AditivoDialog recordForEdit={recordForEdit} />
 
         <Paper className={classes.root}>
           <TableContainer className={classes.container}>
@@ -114,7 +108,16 @@ const AditivoList = () => {
                       <TableCell>{(row.dataRenovacao ? row.dataRenovacao.substring(0, 10) : '')}</TableCell>
                       <TableCell>{(row.dataVencimento ? row.dataVencimento.substring(0, 10) : '')}</TableCell>
                       <TableCell>
-                        <form onSubmit={handleExclude}>
+                        <Button
+                          className={classes.button}
+                          size="small"
+                          onClick={() => {handleOpenDialog(row)}}
+                        >
+                          <EditIcon />
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        <form onSubmit={ () => {handleExclude(row)}}>
                           <input type="hidden" name="aditivo" value={row} />
                           <Button type="submit" className={classes.editLink}>
                             <DeleteIcon />

@@ -112,7 +112,10 @@ const ContratoList = () => {
                       <TableCell>{row.numero}</TableCell>
                       <TableCell>{tiposContrato[row.tipoContrato]}</TableCell>
                       <TableCell>{tiposStatusContrato[row.statusContrato]}</TableCell>
-                      <TableCell>{row.valorContrato}</TableCell>
+                      <TableCell>{new Intl.NumberFormat("pt-BR", {
+                                    style: "currency",
+                                    "currency": "BRL"
+                                  }).format(row.valorContrato)}</TableCell>
                       <TableCell>
                         <Link className={classes.editLink} to={`/contratos/${row._id}/edit`}>
                           <EditIcon />

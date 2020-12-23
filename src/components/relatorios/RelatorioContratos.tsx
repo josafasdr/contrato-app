@@ -154,7 +154,10 @@ export const RelatorioContratos = () => {
                                 <TableCell>{row.numero}</TableCell>
                                 <TableCell>{tiposContrato[row.tipoContrato]}</TableCell>
                                 <TableCell>{tiposStatusContrato[row.statusContrato]}</TableCell>
-                                <TableCell>{row.valorContrato}</TableCell>
+                                <TableCell>{new Intl.NumberFormat("pt-BR", {
+                                              style: "currency",
+                                              "currency": "BRL"
+                                            }).format(row.valorContrato)}</TableCell>
                             </TableRow>
                         );
                         })}

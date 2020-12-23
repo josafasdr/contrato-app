@@ -35,7 +35,7 @@ export function getByEmpresa(idEmpresa:any) {
 export function getAditivosByEmpresa(idEmpresa:any) {
     return axios({
         method: 'GET',
-        url: `${process.env.REACT_APP_PATH_API}/contratos/aditivos?idEmpresa=${idEmpresa}`
+        url: `${process.env.REACT_APP_PATH_API}/aditivos?idEmpresa=${idEmpresa}`
     });
 }
 

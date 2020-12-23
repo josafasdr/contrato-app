@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   textField: {
-    marginTop: '50px',
+    marginTop: '10px',
     [theme.breakpoints.up('sm')]: {
       marginRight: '10px'
     }
@@ -142,25 +142,25 @@ const ContaForm = (props: any) => {
       </FormControl>
 
       <FormControl className={classes.margin}>
-        <InputLabel htmlFor="data-recebimento-setor-label">Data de Recebimento do Setor</InputLabel>
         <TextField
+          label="Data de Recebimento do Setor"
           id="data-recebimento-setor-label"
           className={classes.textField}
           type="date"
           name="dataRecebimentoSetor"
-          value={conta?.dataRecebimentoSetor || ''}
+          value={conta?.dataRecebimentoSetor || new Date()}
           onChange={handleChange}
         />
       </FormControl>
 
       <FormControl className={classes.margin}>
-        <InputLabel htmlFor="data-vencimento-conta-label">Data de Vencimento da Conta</InputLabel>
         <TextField
+          label="Data de Vencimento"
           id="data-vencimento-conta-label"
           className={classes.textField}
           type="date"
           name="dataVencimentoConta"
-          value={conta?.dataVencimentoConta || ''}
+          value={conta?.dataVencimentoConta || new Date()}
           onChange={handleChange}
         />
       </FormControl>

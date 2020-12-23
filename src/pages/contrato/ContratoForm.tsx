@@ -8,7 +8,7 @@ import useService from '../../hooks/useService'
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120,
+    minWidth: 200,
     maxWidth: 300,
   },
   root: {
@@ -29,10 +29,18 @@ const useStyles = makeStyles((theme) => ({
   },
 
   textField: {
-    marginTop: '30px',
+    marginTop: '10px',
     [theme.breakpoints.up('sm')]: {
       marginRight: '10px'
-    }
+    },
+  },
+
+  observacoestextField: {
+    marginTop: '10px',
+    [theme.breakpoints.up('sm')]: {
+      marginRight: '10px'
+    },
+    width: '100%'
   },
 
   flexGrow1: {
@@ -184,30 +192,30 @@ const ContratoForm = () => {
       />
 
       <FormControl className={classes.margin}>
-        <InputLabel htmlFor="data-celebracao-label">Data de Celebração</InputLabel>
         <TextField
+          label="Data de celebração"
           id="data-celebracao-label"
           className={classes.textField}
           type="date"
           name="dataCelebracaoContrato"
-          value={contrato?.dataCelebracaoContrato || ''}
+          value={contrato?.dataCelebracaoContrato || new Date()}
           onChange={handleChange}
         />
       </FormControl>
 
       <FormControl className={classes.margin}>
-        <InputLabel htmlFor="data-finalizacao-label">Data de Finalização</InputLabel>
         <TextField
+          label="Data de finalização"
           className={classes.textField}
           type="date"
           name="dataFinalizacaoContrato"
-          value={contrato?.dataFinalizacaoContrato || ''}
+          value={contrato?.dataFinalizacaoContrato || new Date()}
           onChange={handleChange}
         />
       </FormControl>
 
       <TextField
-        className={classes.textField}
+        className={classes.observacoestextField}
         label="Observações"
         name="observacoesContrato"
         value={contrato?.observacoesContrato || ''}

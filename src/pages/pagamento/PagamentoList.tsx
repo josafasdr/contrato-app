@@ -37,7 +37,7 @@ const useStyles = makeStyles({
   },
 
   container: {
-    width: '50%',
+    width: '100%',
     minWidth: '200px'
   },
 
