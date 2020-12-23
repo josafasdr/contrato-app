@@ -60,9 +60,6 @@ const MenuProps = {
 };
 
 const ContaForm = (props: any) => {
-
-  console.log('props conta form = ', props);
-
   const classes = useStyles()
   const [conta, setConta] = useState<Conta>(props.recordForEdit || {})
   const [change, setChange] = useState(false)

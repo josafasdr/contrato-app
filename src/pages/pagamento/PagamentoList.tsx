@@ -12,15 +12,18 @@ import {
   TableRow
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
+import EditIcon from '@material-ui/icons/Edit'
 
 import PagamentoDialog from './PagamentoDialog'
 import { ContaContext } from '../conta/ContaList';
+import { ContratoContext } from '../contrato';
+import * as contratoService from '../../services/contratoService';
 
 const columns = [
   { id: 'dataPagamentoConta', label: 'Data do Pagamento' },
   { id: 'valorPago', label: 'Valor Pago' },
   { id: 'taxaJuros', label: 'Taxa de Juros' },
-  { id: 'delete', label: 'Excluir' }
+  { id: 'delete', label: '' }
 ];
 
 const useStyles = makeStyles({
@@ -45,33 +48,36 @@ const useStyles = makeStyles({
 
 export const PagamentoContext = createContext<any | null>({})
 
-const PagamentoList = () => {
+const PagamentoList = (props:any) => {
+
+  console.log('pagamentolist props = ', props)
+
   const classes = useStyles()
   const [dialogOpen, setDialogOpen] = useState(false)
-  const { conta, setConta } = useContext(ContaContext)
+  const [recordForEdit, setRecordForEdit] = useState(null)
+  const [conta, setConta] = useState({...props.conta});
+  const { contrato, setContrato } = useContext(ContratoContext)
 
-  const handleOpenDialog = () => {
+  const handleOpenDialog = (item:any) => {
+    setRecordForEdit(item);
     setDialogOpen(true)
   }
 
-  const handleExclude = (event: any) => {
-    event.preventDefault()
-    event.persist()
+  const handleExclude = (item: any) => {
 
-    const obj = event.target.pagamento
-    Object.keys(obj).forEach(key => {
-      if (obj[key].name && obj[key].name === 'pagamento') {
-        const pagamento = obj[key].value
-
-        if (pagamento && pagamento !== undefined) {
-          const pagamentos = conta.pagamentos.filter((item: any) => item !== pagamento)
-          setConta({
-            ...conta,
-            pagamentos: pagamentos
-          })
+    for(let contaContrato of contrato.contas){
+      console.log('contaContrato._id = ', contaContrato._id)
+      console.log('conta._id = ', conta._id)
+      if(contaContrato._id === conta._id){
+        const index = contaContrato.pagamentos.indexOf(item);
+        if (index > -1) {
+          contaContrato.pagamentos.splice(index, 1);
         }
+    
       }
-    })
+    }
+
+    contratoService.update(contrato, contrato._id);
   }
 
   return (
@@ -81,13 +87,13 @@ const PagamentoList = () => {
         variant="contained"
         size="small"
         color="primary"
-        onClick={handleOpenDialog}
+        onClick={() =>{handleOpenDialog({})}}
       >
         Inserir Pagamento
       </Button>
 
       <PagamentoContext.Provider value={{dialogOpen, setDialogOpen}}>
-        <PagamentoDialog />
+        <PagamentoDialog recordForEdit={props.conta} />
 
         <Paper className={classes.root}>
           <TableContainer className={classes.container}>
@@ -114,7 +120,7 @@ const PagamentoList = () => {
                       <TableCell>{row.valorPago}</TableCell>
                       <TableCell>{row.taxaJuros}</TableCell>
                       <TableCell>
-                        <form onSubmit={handleExclude}>
+                          <form onSubmit={ () => {handleExclude(row)}}>
                           <input type="hidden" name="pagamento" value={row} />
                           <Button type="submit" className={classes.editLink}>
                             <DeleteIcon />

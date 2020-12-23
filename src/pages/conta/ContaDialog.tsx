@@ -44,9 +44,11 @@ const ContaDialog = (props:any) => {
       props.recordForEdit.dataRecebimentoSetor = props.recordForEdit.dataRecebimentoSetor.substring(0, 10);
   }
 
+  console.log('contadialog props.recordForEdit - ', props.recordForEdit)
+
   const classes = useStyles()
   const { contrato, setContrato } = useContext(ContratoContext)
-  const [conta, setConta] = useState({ _id: 0 })
+  const [conta, setConta] = useState({...props.recordForEdit})
   const { dialogOpen, setDialogOpen } = useContext(ContaContext)
 
   const handleClose = () => {
@@ -106,7 +108,7 @@ const ContaDialog = (props:any) => {
           <ContaForm recordForEdit={props.recordForEdit} onChange={handleChange} />
           <Box className={classes.box} component="fieldset">
             <legend className={classes.legend}>Contas</legend>
-            <PagamentoList />
+            <PagamentoList conta={props.recordForEdit} />
           </Box>
         </DialogContent>
         <DialogActions>
