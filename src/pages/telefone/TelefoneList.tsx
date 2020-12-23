@@ -19,8 +19,7 @@ import { EmpresaContext } from '../empresa';
 const columns = [
   // { id: '_id', label: 'Id', minWidth: 50 },
   { id: 'ddd', label: 'DDD' },
-  { id: 'telefone', label: 'Telefone' },
-  { id: 'delete', label: 'Excluir' }
+  { id: 'telefone', label: 'Telefone' }
 ];
 
 const useStyles = makeStyles({
@@ -39,14 +38,15 @@ const useStyles = makeStyles({
   },
 
   editLink: {
-    color: 'inherit'
+    color: 'gray'
   }
 })
 
 export const TelefoneContext = createContext<any | null>({})
 
-const TelefoneList = () => {
+const TelefoneList = (props: any) => {
   const classes = useStyles()
+  const { readOnly } = props
   const [dialogOpen, setDialogOpen] = useState(false)
   const { empresa, setEmpresa } = useContext(EmpresaContext)
 
@@ -64,12 +64,13 @@ const TelefoneList = () => {
         const telefone = obj[key].value
 
         if (telefone && telefone !== undefined) {
-          console.log(telefone)
-          const telefones = empresa.telefones.filter((item: any) => item !== telefone)
-          console.log(telefones)
+          const telefones = empresa.data.telefones.filter((item: any) => item !== telefone)
           setEmpresa({
             ...empresa,
-            telefones: telefones
+            data: {
+              ...empresa.data,
+              telefones: telefones
+            }
           })
         }
       }
@@ -78,7 +79,7 @@ const TelefoneList = () => {
 
   return (
     <div className={classes.root}>
-      <Button
+      {!readOnly && <Button
         className={classes.button}
         variant="contained"
         size="small"
@@ -86,7 +87,7 @@ const TelefoneList = () => {
         onClick={handleOpenDialog}
       >
         Inserir Telefone
-      </Button>
+      </Button>}
 
       <TelefoneContext.Provider value={{dialogOpen, setDialogOpen}}>
         <TelefoneDialog />
@@ -106,22 +107,27 @@ const TelefoneList = () => {
                       <TableSortLabel />
                     </TableCell>
                   ))}
+                  {/* coluna de ações */}
+                  {!readOnly && <TableCell style={{ backgroundColor: '#f5f5f5' }}>
+                      Ações
+                    <TableSortLabel />
+                  </TableCell>}
                 </TableRow>
               </TableHead>
-              {empresa?.telefones && <TableBody>
-                {empresa?.telefones.map((row: any) => {
+              {empresa?.data?.telefones && <TableBody>
+                {empresa?.data?.telefones.map((row: any) => {
                   return (
                     <TableRow hover tabIndex={-1} key={`${row.ddd}-${row.telefone}`}>
                       <TableCell>{row.ddd}</TableCell>
                       <TableCell>{row.telefone}</TableCell>
-                      <TableCell>
+                      {!readOnly && <TableCell>
                         <form onSubmit={handleExclude}>
                           <input type="hidden" name="telefone" value={row} />
                           <Button type="submit" className={classes.editLink}>
-                            <DeleteIcon />
+                            <DeleteIcon titleAccess="Excluir" />
                           </Button>
                         </form>
-                      </TableCell>
+                      </TableCell>}
                     </TableRow>
                   );
                 })}

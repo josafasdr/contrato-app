@@ -1,8 +1,9 @@
 import { makeStyles } from '@material-ui/core'
 
+import { RelatorioPagamento } from '../components/relatorios'
+
 const useStyles = makeStyles({
   root: {
-    //display: 'flex'
   }
 })
 
@@ -11,7 +12,7 @@ const Home = () => {
 
   return (
     <div className={classes.root}>
-      <h3>Home</h3>
+      <RelatorioPagamento />
     </div>
   )
 }
