@@ -31,9 +31,9 @@ const Home = () => {
       <Paper>
         <AppBar position="static">
           <Tabs value={value} onChange={tabChange} aria-label="simple tabs example">
-            <Tab label="Contratos" {...a11yProps(0)} />
+            <Tab label="Pagamentos" {...a11yProps(0)} />
             <Tab label="Aditivos" {...a11yProps(1)} />
-            <Tab label="Pagamentos" {...a11yProps(2)} />
+            <Tab label="Contratos" {...a11yProps(2)} />
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>

@@ -125,19 +125,6 @@ const SideMenu = (props: any) => {
         <ListItemText primary="Contratos" />
       </ListItem>
 
-      <ListItem
-        button
-        component={NavLink}
-        exact
-        to="/contratos/create"
-        className={classes.link}
-        activeClassName={classes.active}
-      >
-        <ListItemIcon>
-          <NoteAddIcon />
-        </ListItemIcon>
-        <ListItemText primary="Novo Contrato" />
-      </ListItem>
     </List>
   )
 

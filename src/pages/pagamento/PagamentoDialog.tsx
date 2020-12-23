@@ -13,8 +13,6 @@ import { ContratoContext } from '../contrato'
 
 const PagamentoDialog = (props:any) => {
 
-  console.log('props = ', props)
-
   if(props.recordForEdit){
     if(props.recordForEdit.dataPagamentoConta)
       props.recordForEdit.dataPagamentoConta = props.recordForEdit.dataPagamentoConta.substring(0, 10);
@@ -24,9 +22,6 @@ const PagamentoDialog = (props:any) => {
   const [conta, setConta] = useState(props.recordForEdit)
   const [pagamento, setPagamento] = useState({ _id:0})
   const { dialogOpen, setDialogOpen } = useContext(PagamentoContext)
-
-  console.log('contrato = ', contrato)
-  console.log('conta = ', conta)
 
   const handleClose = () => {
     setDialogOpen(false)
@@ -38,11 +33,7 @@ const PagamentoDialog = (props:any) => {
 
   const handleInsert = () => {
 
-    console.log('handleinsert pagamento = ', contrato)
-
     for(let contaContrato of contrato.contas){
-      console.log('contaContrato._id = ', contaContrato._id)
-      console.log('conta._id = ', conta._id)
       if(contaContrato._id === conta._id){
         if(contaContrato.pagamentos)
           contaContrato.pagamentos.push(pagamento);
@@ -53,7 +44,6 @@ const PagamentoDialog = (props:any) => {
       }
     }
 
-    console.log('final handleinsert pagamento = ', contrato)
     contratoService.update(contrato, contrato._id)
       .then((response) => {
         setDialogOpen(false)

@@ -50,8 +50,6 @@ export const PagamentoContext = createContext<any | null>({})
 
 const PagamentoList = (props:any) => {
 
-  console.log('pagamentolist props = ', props)
-
   const classes = useStyles()
   const [dialogOpen, setDialogOpen] = useState(false)
   const [recordForEdit, setRecordForEdit] = useState(null)
@@ -66,8 +64,6 @@ const PagamentoList = (props:any) => {
   const handleExclude = (item: any) => {
 
     for(let contaContrato of contrato.contas){
-      console.log('contaContrato._id = ', contaContrato._id)
-      console.log('conta._id = ', conta._id)
       if(contaContrato._id === conta._id){
         const index = contaContrato.pagamentos.indexOf(item);
         if (index > -1) {

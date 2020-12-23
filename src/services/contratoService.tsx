@@ -25,6 +25,20 @@ export function get(id:any) {
     });
 }
 
+export function getByEmpresa(idEmpresa:any) {
+    return axios({
+        method: 'GET',
+        url: `${process.env.REACT_APP_PATH_API}/contratos?idEmpresa=${idEmpresa}`
+    });
+}
+
+export function getAditivosByEmpresa(idEmpresa:any) {
+    return axios({
+        method: 'GET',
+        url: `${process.env.REACT_APP_PATH_API}/contratos/aditivos?idEmpresa=${idEmpresa}`
+    });
+}
+
 export function remove(id:any){
     axios({
         method: 'delete',
