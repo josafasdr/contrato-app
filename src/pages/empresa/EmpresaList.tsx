@@ -13,7 +13,6 @@ import {
   TablePagination,
   TableRow
 } from '@material-ui/core'
-//import { DataGrid, ColDef, RowProps, RowsProp, RowModel } from '@material-ui/data-grid'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -21,7 +20,6 @@ import DeleteIcon from '@material-ui/icons/Delete'
 import { EmpresaContext } from '.'
 import useService from '../../hooks/useService'
 import EmpresaDeleteDialog from './EmpresaDeleteDialog'
-//import { Empresa } from '../../model/Empresa';
 
 const columns = [
   { id: 'rasaoSocial', label: 'Razão Social' },
@@ -30,14 +28,6 @@ const columns = [
   { id: 'email', label: 'E-mail' },
   { id: 'actions', label: 'Ações' }
 ]
-
-/* const columns: ColDef[] = [
-  { field: 'rasaoSocial', headerName: 'Razão Social'},
-  { field: 'nomeFantasia', headerName: 'Nome Fantasia'},
-  { field: 'cnpj', headerName: 'CNPJ'},
-  { field: 'email', headerName: 'E-mail'},
-  { field: 'actions', headerName: 'Ações'},
-] */
 
 const useStyles = makeStyles({
   root: {
@@ -63,8 +53,7 @@ const EmpresaList = () => {
   const classes = useStyles()
   const { setEmpresa } = useContext(EmpresaContext)
   const { loading, data, error } = useService({
-    url: 'http://localhost:4000/empresas',
-    //url: 'https://contrato-api.herokuapp.com/empresas',
+    url: `${process.env.REACT_APP_PATH_API}/empresas`,
     method: 'GET'
   })
 
@@ -107,10 +96,6 @@ const EmpresaList = () => {
         error ? 
           <p>Erro :(</p> :
         <Paper className={classes.root}>
-          {/* <DataGrid columns={columns} rows={data.map((row, index) => {
-            console.log({ ...row, id: index })
-            return { ...row, id: index }
-           })}/> */}
           <TableContainer className={classes.container}>
             <Table stickyHeader={true} aria-label="sticky table">
               <TableHead>
@@ -131,8 +116,6 @@ const EmpresaList = () => {
                 {data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row: any) => {
                   return (
                     <TableRow hover tabIndex={-1} key={row._id}>
-                      {/* <TableCell>{new Date(parseInt(row.createdAt)).toLocaleDateString('pt-br')}</TableCell> */}
-                      {/* <TableCell>{row._id}</TableCell> */}
                       <TableCell>{row.nomeFantasia}</TableCell>
                       <TableCell>{row.razaoSocial}</TableCell>
                       <TableCell>{row.cnpj}</TableCell>

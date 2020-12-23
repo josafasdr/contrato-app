@@ -52,7 +52,7 @@ const EmpresaEdit = () => {
   const handlePost = () => {
     axios({
       method: 'post',
-      url: 'http://localhost:4000/empresas',
+      url: `${process.env.REACT_APP_PATH_API}/empresas`,
       headers: { 'Content-Type': 'application/json' },
       data: empresa.data
     }).then(() => {
@@ -69,7 +69,7 @@ const EmpresaEdit = () => {
   const handlePut = () => {
     axios({
       method: 'put',
-      url: `http://localhost:4000/empresas/${id}`,
+      url: `${process.env.REACT_APP_PATH_API}/empresas/${id}`,
       headers: { 'Content-Type': 'application/json' },
       data: empresa.data
     }).then(() => {
@@ -96,7 +96,7 @@ const EmpresaEdit = () => {
     if (id) {
       axios({
         method: 'GET',
-        url: `http://localhost:4000/empresas/${id}`
+        url: `${process.env.REACT_APP_PATH_API}/empresas/${id}`
       })
       .then((response) => {
         setEmpresa((prevState: any) => ({
